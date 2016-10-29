@@ -35,18 +35,15 @@ local _gitdir=$srcdir/$_gitname
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DCMAKE_BUILD_TYPE=Release \
       -DBINARY_PACKAGE_BUILD=1 \
-    -DUSE_LIBSECRET=On \
+      -DUSE_LIBSECRET=On \
       -DUSE_GNOME_KEYRING=Off \
       -DUSE_COLORD=On \
-       -DCMAKE_INSTALL_LIBDIR=lib
+      -DCMAKE_INSTALL_LIBDIR=lib
   make
   
   }
   package() {
  cd "$srcdir/$_gitname/build" 
-
-
-  
   make DESTDIR=${pkgdir} install
   
 
