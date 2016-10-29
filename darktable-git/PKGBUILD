@@ -1,0 +1,53 @@
+ 
+# Maintainer: ruano1983 <ruano1983@gmail.com>
+pkgname=darktable-git
+_gitname=darktable
+pkgver=release.2.1.0.r2093.g19c3415
+pkgrel=1
+conflicts=(darktable)
+provides=(darktable)
+pkgdesc="Open source photography workflow application and RAW developer"
+arch=('x86_64')
+url="http://darktable.sf.net/"
+license=('GPL3')
+depends=('exiv2' 'intltool' 'lcms2' 'lensfun' 'libglade' 'dbus-glib' 'curl' 'kwallet'
+         'libgphoto2' 'openexr' 'sqlite' 'libxslt' 'libsoup' 'json-glib' 'flickcurl' 'librsvg'
+         'colord' 'graphicsmagick' 'sdl' 'libwebp' 'openjpeg' 'gtk3' 'pugixml')
+makedepends=('cmake')
+options=('!libtool')
+source=('git://github.com/darktable-org/darktable.git')
+md5sums=('SKIP')
+
+
+
+pkgver() {
+  cd $_gitname
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build() {
+local _gitdir=$srcdir/$_gitname
+  cd $_gitdir
+  [[ ! -d build ]] && mkdir -p build
+
+  cd build
+  cmake .. \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DBINARY_PACKAGE_BUILD=1 \
+    -DUSE_LIBSECRET=On \
+      -DUSE_GNOME_KEYRING=Off \
+      -DUSE_COLORD=On \
+       -DCMAKE_INSTALL_LIBDIR=lib
+  make
+  
+  }
+  package() {
+ cd "$srcdir/$_gitname/build" 
+
+
+  
+  make DESTDIR=${pkgdir} install
+  
+
+}
